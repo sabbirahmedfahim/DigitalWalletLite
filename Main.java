@@ -1,32 +1,35 @@
 /*
 ========================= JDBC Helpers (Not Core OOP) =========================
+JDBC          w    --> Java API that lets Java objects interact with databases like any other class, through methods.
 PreparedStatement --> an object to send parameterized SQL queries to the DB, like calling a method with arguments.
 Statement         --> an object to send static SQL queries without parameters.
 ResultSet         --> stores the data returned from a query; acts like an object we iterate over.
 rs.next()         --> moves to the next row of the ResultSet; returns false if no more rows.
 getGeneratedKeys()--> built-in JDBC method that returns DB-generated AUTO_INCREMENT keys.
-JDBC              --> Java API that lets Java objects interact with databases like any other class, through methods.
 setString, setInt --> methods to assign values to SQL parameters, like passing arguments to a method.
 executeUpdate()   --> executes insert/update/delete queries; returns affected row count.
 executeQuery()    --> executes select queries; returns ResultSet object with query results.
 */
-import java.sql.*;
+import java.sql.*; 
 import java.util.Scanner;
 
 public class Main {
 
+    // Database connection using JDBC
     static final String URL = "jdbc:mysql://localhost:3306/wallet_db_single";
     static final String USER = "wallet_user";
     static final String PASS = "1010";
 
-    static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in); 
     static Connection conn;
 
-    static class User {
+    static class User 
+    {
         int id;
         String name;
         String email;
-        User(int id, String name, String email) {
+        User(int id, String name, String email) 
+        {
             this.id = id;
             this.name = name;
             this.email = email;
@@ -34,24 +37,26 @@ public class Main {
     }
 
     // Print outputs with a border
-    static void printWithBorder(String header, String body) {
-        System.out.println("=== " + header + " ===");
-        System.out.println(body);
+    static void printWithBorder(String headerOfTheBorder, String outputOfTheCommand) 
+    {
+        System.out.println();
+        System.out.println("=== " + headerOfTheBorder + " ===");
+        System.out.println(outputOfTheCommand);
         System.out.println("===========================");
     }
 
     // Register 
     static void register() throws SQLException {
         System.out.print("Enter name: ");
-        String name = sc.nextLine();
+        String name = sc.nextLine(); 
         System.out.print("Enter email: ");
-        String email = sc.nextLine();
+        String email = sc.nextLine(); 
         System.out.print("Enter password: ");
-        String password = sc.nextLine();
+        String password = sc.nextLine(); 
 
-        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"; // just a string :)
         /*
-        * Statement & PreparedStatement **send SQL queries** to the database.
+        * Statement & PreparedStatement |**|send SQL queries|**| to the database.
         Statement         --> executes static SQL queries directly (no parameters)
         PreparedStatement --> executes parameterized queries (with ?)
 
@@ -62,6 +67,8 @@ public class Main {
         * We need user_id for fast query processing, rather than email
         */
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // though they is id column, i am accessing name, email, password, here id is auto generated 
+            // and who is making id? it's MySQL, automatically assigns a new, unique integer to id
             stmt.setString(1, name);
             stmt.setString(2, email);
             stmt.setString(3, password);
@@ -76,8 +83,8 @@ public class Main {
             to a database, send SQL queries, and process results.
             A bridge between Java code and a database.
             */
-            if (rs.next()) printWithBorder("Registered", "Your ID: " + rs.getInt(1));
-        } catch (SQLIntegrityConstraintViolationException e) { // catch duplicate email
+            if (rs.next()) printWithBorder("Registered", "Your ID: " + rs.getInt(1)); // first col
+        } catch (SQLIntegrityConstraintViolationException e) { // catch duplicate email through rs.next()
             printWithBorder("Error", "Email already exists. Try logging in.");
         }
     }
@@ -85,9 +92,9 @@ public class Main {
     // Login 
     static User login() throws SQLException {
         System.out.print("Enter email: ");
-        String email = sc.nextLine();
+        String email = sc.nextLine(); // take email
         System.out.print("Enter password: ");
-        String password = sc.nextLine();
+        String password = sc.nextLine(); // take password
 
         String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -118,6 +125,12 @@ public class Main {
     static void deposit(User user) throws SQLException {
         System.out.print("Enter amount to deposit: ");
         double amount = Double.parseDouble(sc.nextLine());
+
+        if (amount <= 0) {
+            printWithBorder("Error", "Amount must be positive.");
+            return;
+        }
+
         double balance = getBalance(user.id);
         String sql = "INSERT INTO wallets (user_id, balance) VALUES (?, ?) ON DUPLICATE KEY UPDATE balance = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -134,6 +147,10 @@ public class Main {
     static void withdraw(User user) throws SQLException {
         System.out.print("Enter amount to withdraw: ");
         double amount = Double.parseDouble(sc.nextLine());
+        if (amount <= 0) {
+            printWithBorder("Error", "Amount must be positive.");
+            return;
+        }
         double balance = getBalance(user.id);
         if (amount > balance) {
             printWithBorder("Error", "Insufficient funds.");
@@ -167,6 +184,11 @@ public class Main {
 
         System.out.print("Enter amount to send: ");
         double amount = Double.parseDouble(sc.nextLine());
+        if (amount <= 0) {
+            printWithBorder("Error", "Amount must be positive.");
+            return;
+        }
+
         double senderBalance = getBalance(user.id);
         if (amount > senderBalance) {
             printWithBorder("Error", "Insufficient funds.");
@@ -226,12 +248,15 @@ public class Main {
         printWithBorder("Balance", String.valueOf(balance));
     }
 
-    public static void main(String[] args) {
+    // Main Function
+    public static void main(String[] args) 
+    {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(URL, USER, PASS);
 
-            while (true) {
+            while (true) // infinite loop will continue to do operations until we exit
+            {
                 System.out.println("\n=== Digital Wallet System ===");
                 System.out.println("1. Login");
                 System.out.println("2. Register");
@@ -259,7 +284,7 @@ public class Main {
                         }
                     }
                 } else if (choice == 2) register();
-                else break;
+                else break; 
             }
 
         } catch (ClassNotFoundException e) {
