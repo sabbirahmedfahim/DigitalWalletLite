@@ -1,8 +1,9 @@
 # DigitalWalletLite – Console-Based Java Wallet
 
-A Java console-based digital wallet system with MySQL backend. All logic is in a single `Main.java` file. This is a `lite version` of our main project, which was postponed due to some uncertain reason. We like to think you’re clever enough to handle any complexity if you decide to run the project—but don’t worry, it’s not too scary. 😉
+DigitalWalletLite is a lightweight Java console application with a MySQL backend.  
+It’s designed as a simple, easy-to-understand demonstration of how Java programs can interact with a relational database to manage user accounts and transactions.
 
-### Features
+## Features
 
 - User registration and login
 - Deposit and withdraw money
