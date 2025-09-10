@@ -1,15 +1,34 @@
 # DigitalWalletLite – Console-Based Java Wallet
 
-DigitalWalletLite is a lightweight Java console application with a MySQL backend.  
+DigitalWalletLite is a lightweight Java console application with a MySQL backend.
 It’s designed as a simple, easy-to-understand demonstration of how Java programs can interact with a relational database to manage user accounts and transactions.
 
-## Features
+It was originally developed as part of my university  **Object Oriented Programming (OOP)** and **Database Management System (DBMS)** courses, and represents my first attempt at a coursework project, through which I learned a lot.
 
-- User registration and login
-- Deposit and withdraw money
-- Transfer money to other users
-- Check account balance
-- View transaction history
+## Project Demo
+
+### Main Menu & Login
+![Main Menu and Login](screenshots/main_menu_login.png)  
+*Welcome screen with user options after login.*
+
+### Transfer Money
+![Transfer Money](screenshots/transfer_money.png)  
+*Shows the transfer process where a user sends money to another user and the updated balance is displayed.*
+
+### Transaction History
+![Transaction History](screenshots/transaction_history.png)  
+*Displays the transaction history for a user, including deposits, withdrawals, sent, and received transfers.*
+
+### Database Tables
+
+#### Users Table
+![Users Table](screenshots/users_table.png)
+
+#### Wallets Table
+![Wallets Table](screenshots/wallets_table.png)
+
+#### Transactions Table
+![Transactions Table](screenshots/transactions_table.png)
 
 ## Prerequisites
 
@@ -106,7 +125,5 @@ javac -d bin -cp "lib\mysql-connector-j-8.0.33.jar" Main.java
 java -cp "bin;lib\mysql-connector-j-8.0.33.jar" Main
 ```
 </details>
-
-## Note
 
 
