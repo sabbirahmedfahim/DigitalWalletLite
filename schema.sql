@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Wallets table stores the balance for each user
 CREATE TABLE IF NOT EXISTS wallets (
-    -- user_id is used to output transections serially
     user_id INT PRIMARY KEY,
     balance DOUBLE DEFAULT 0, -- current wallet balance
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
